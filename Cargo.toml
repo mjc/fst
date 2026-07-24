@@ -31,6 +31,7 @@ regex = ["regex-syntax"]
 [dependencies]
 byteorder = "1"
 regex-syntax = { version = "0.8", optional = true }
+smallvec = "1"
 utf8-ranges = "1"
 
 [dev-dependencies]

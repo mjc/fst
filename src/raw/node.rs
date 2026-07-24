@@ -838,6 +838,7 @@ fn unpack_delta(slice: &[u8], trans_pack_size: usize, node_addr: usize) -> Compi
 #[cfg(test)]
 mod tests {
     use quickcheck::{quickcheck, TestResult};
+    use smallvec::smallvec;
 
     use crate::raw::build::BuilderNode;
     use crate::raw::node::{node_new, Node};
@@ -905,7 +906,7 @@ mod tests {
         let bnode = BuilderNode {
             is_final: false,
             final_output: Output::zero(),
-            trans: vec![],
+            trans: smallvec![],
         };
         let (addr, buf) = compile(&bnode);
         let node = node_new(VERSION, addr, &buf);
@@ -918,7 +919,7 @@ mod tests {
         let bnode = BuilderNode {
             is_final: false,
             final_output: Output::zero(),
-            trans: vec![trans(20, b'a')],
+            trans: smallvec![trans(20, b'a')],
         };
         let (addr, buf) = compile(&bnode);
         let node = node_new(VERSION, addr, &buf);
@@ -931,7 +932,7 @@ mod tests {
         let bnode = BuilderNode {
             is_final: false,
             final_output: Output::zero(),
-            trans: vec![trans(2, b'\xff')],
+            trans: smallvec![trans(2, b'\xff')],
         };
         let (addr, buf) = compile(&bnode);
         let node = node_new(VERSION, addr, &buf);
@@ -944,7 +945,7 @@ mod tests {
         let bnode = BuilderNode {
             is_final: false,
             final_output: Output::zero(),
-            trans: vec![
+            trans: smallvec![
                 trans(2, b'a'),
                 trans(3, b'b'),
                 trans(4, b'c'),

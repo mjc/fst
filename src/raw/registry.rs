@@ -127,6 +127,8 @@ impl RegistryCell {
 
 #[cfg(test)]
 mod tests {
+    use smallvec::smallvec;
+
     use super::{Registry, RegistryCache, RegistryCell, RegistryEntry};
     use crate::raw::build::BuilderNode;
     use crate::raw::{Output, Transition};
@@ -162,7 +164,7 @@ mod tests {
         let bnode = BuilderNode {
             is_final: false,
             final_output: Output::zero(),
-            trans: vec![],
+            trans: smallvec![],
         };
         assert_rejected(reg.entry(&bnode));
     }
@@ -173,7 +175,7 @@ mod tests {
         let bnode = BuilderNode {
             is_final: true,
             final_output: Output::zero(),
-            trans: vec![],
+            trans: smallvec![],
         };
         assert_insert_and_found(&mut reg, &bnode);
     }
@@ -184,7 +186,7 @@ mod tests {
         let bnode = BuilderNode {
             is_final: false,
             final_output: Output::zero(),
-            trans: vec![Transition {
+            trans: smallvec![Transition {
                 addr: 0,
                 inp: b'a',
                 out: Output::zero(),
@@ -196,7 +198,7 @@ mod tests {
             ..bnode.clone()
         }));
         assert_not_found(reg.entry(&BuilderNode {
-            trans: vec![Transition {
+            trans: smallvec![Transition {
                 addr: 0,
                 inp: b'b',
                 out: Output::zero(),
@@ -204,7 +206,7 @@ mod tests {
             ..bnode.clone()
         }));
         assert_not_found(reg.entry(&BuilderNode {
-            trans: vec![Transition {
+            trans: smallvec![Transition {
                 addr: 0,
                 inp: b'a',
                 out: Output::new(1),

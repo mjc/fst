@@ -1,6 +1,7 @@
 use std::io::{self, Write};
 
 use byteorder::{LittleEndian, WriteBytesExt};
+use smallvec::SmallVec;
 
 use crate::error::Result;
 use crate::raw::counting_writer::CountingWriter;
@@ -85,7 +86,7 @@ struct BuilderNodeUnfinished {
 pub struct BuilderNode {
     pub is_final: bool,
     pub final_output: Output,
-    pub trans: Vec<Transition>,
+    pub trans: SmallVec<[Transition; 1]>,
 }
 
 #[derive(Debug)]
@@ -448,7 +449,7 @@ impl Clone for BuilderNode {
         self.is_final = source.is_final;
         self.final_output = source.final_output;
         self.trans.clear();
-        self.trans.extend(source.trans.iter());
+        self.trans.extend_from_slice(&source.trans);
     }
 }
 
@@ -457,7 +458,7 @@ impl Default for BuilderNode {
         BuilderNode {
             is_final: false,
             final_output: Output::zero(),
-            trans: vec![],
+            trans: SmallVec::new(),
         }
     }
 }
