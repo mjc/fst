@@ -86,7 +86,7 @@ struct BuilderNodeUnfinished {
 pub struct BuilderNode {
     pub is_final: bool,
     pub final_output: Output,
-    pub trans: SmallVec<[Transition; 1]>,
+    pub trans: SmallVec<[Transition; 4]>,
 }
 
 #[derive(Debug)]
@@ -460,5 +460,25 @@ impl Default for BuilderNode {
             final_output: Output::zero(),
             trans: SmallVec::new(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::BuilderNode;
+    use crate::raw::{Output, Transition};
+
+    #[test]
+    fn common_branching_nodes_keep_transitions_inline() {
+        let mut node = BuilderNode::default();
+        for inp in b'a'..=b'd' {
+            node.trans.push(Transition {
+                inp,
+                out: Output::zero(),
+                addr: usize::from(inp),
+            });
+        }
+
+        assert!(!node.trans.spilled());
     }
 }
